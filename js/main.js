@@ -33,6 +33,18 @@
     syncThemeToggle();
   }
 
+  /* QR image: if primary host fails, use data-qr-fallback */
+  var qrImg = document.querySelector('.donate-qr-img');
+  if (qrImg) {
+    qrImg.addEventListener('error', function onQrError() {
+      var fb = qrImg.getAttribute('data-qr-fallback');
+      if (fb && qrImg.src.indexOf('quickchart.io') === -1) {
+        qrImg.removeEventListener('error', onQrError);
+        qrImg.src = fb;
+      }
+    });
+  }
+
   var header = document.getElementById('siteHeader');
   var navToggle = document.getElementById('navToggle');
   var navLinks = document.getElementById('navLinks');
@@ -92,7 +104,7 @@
         });
         btn.classList.add('is-selected');
         var amt = btn.getAttribute('data-amount') || '';
-        tierNote.innerHTML = 'चयनित: <strong>₹' + amt + '</strong> (डेमो)';
+        tierNote.innerHTML = 'Selected: <strong>₹' + amt + '</strong> (demo)';
       });
     });
   }
