@@ -135,6 +135,66 @@ body {
   transition: background-color 0.25s ease, color 0.25s ease;
 }
 
+/* Premium cursor (desktop only) */
+.cursor-dot,
+.cursor-ring {
+  position: fixed;
+  left: 0;
+  top: 0;
+  pointer-events: none;
+  opacity: 0;
+  z-index: 120;
+  transform: translate(-50%, -50%);
+  transition: opacity 0.2s ease, transform 0.15s ease, width 0.2s ease, height 0.2s ease,
+    border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.cursor-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--accent);
+  box-shadow: 0 0 18px rgba(59, 130, 246, 0.45);
+}
+
+.cursor-ring {
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  border: 1.5px solid rgba(59, 130, 246, 0.5);
+  background: rgba(59, 130, 246, 0.08);
+}
+
+@media (pointer: fine) {
+  body.has-premium-cursor {
+    cursor: none;
+  }
+
+  body.has-premium-cursor a,
+  body.has-premium-cursor button,
+  body.has-premium-cursor input,
+  body.has-premium-cursor textarea,
+  body.has-premium-cursor [data-scroll] {
+    cursor: none;
+  }
+
+  body.has-premium-cursor .cursor-dot,
+  body.has-premium-cursor .cursor-ring {
+    opacity: 1;
+  }
+
+  body.has-premium-cursor.cursor-active .cursor-dot {
+    transform: translate(-50%, -50%) scale(0.9);
+  }
+
+  body.has-premium-cursor.cursor-active .cursor-ring {
+    width: 42px;
+    height: 42px;
+    border-color: rgba(59, 130, 246, 0.8);
+    background: rgba(59, 130, 246, 0.14);
+  }
+}
+
 img {
   max-width: 100%;
   height: auto;
@@ -433,11 +493,12 @@ h4 {
   cursor: pointer;
   border: 2px solid transparent;
   text-decoration: none;
-  transition: background 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s;
+  transition: background 0.25s, color 0.25s, border-color 0.25s, box-shadow 0.25s, transform 0.25s;
 }
 
 .btn:hover {
   text-decoration: none;
+  transform: translateY(-1px);
 }
 
 .btn-primary {
@@ -487,6 +548,59 @@ h4 {
 
 .center {
   text-align: center;
+}
+
+.card,
+.project-card,
+.value-card,
+.person-card,
+.contact-card,
+.contact-form,
+.donate-qr,
+.hero-img-wrap {
+  position: relative;
+  isolation: isolate;
+}
+
+.card::after,
+.project-card::after,
+.value-card::after,
+.person-card::after,
+.contact-card::after,
+.contact-form::after,
+.donate-qr::after,
+.hero-img-wrap::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(120deg, transparent 35%, rgba(255, 255, 255, 0.16) 50%, transparent 65%);
+  opacity: 0;
+  transform: translateX(-120%);
+  transition: opacity 0.25s ease, transform 0.8s ease;
+  pointer-events: none;
+}
+
+[data-theme='dark'] .card::after,
+[data-theme='dark'] .project-card::after,
+[data-theme='dark'] .value-card::after,
+[data-theme='dark'] .person-card::after,
+[data-theme='dark'] .contact-card::after,
+[data-theme='dark'] .contact-form::after,
+[data-theme='dark'] .donate-qr::after,
+[data-theme='dark'] .hero-img-wrap::after {
+  background: linear-gradient(120deg, transparent 35%, rgba(148, 163, 184, 0.14) 50%, transparent 65%);
+}
+
+.card:hover::after,
+.project-card:hover::after,
+.value-card:hover::after,
+.person-card:hover::after,
+.contact-card:hover::after,
+.contact-form:hover::after,
+.donate-qr:hover::after,
+.hero-img-wrap:hover::after {
+  opacity: 1;
+  transform: translateX(120%);
 }
 
 /* Hero */
@@ -744,10 +858,12 @@ h4 {
   border-radius: var(--radius);
   padding: clamp(1.25rem, 3vw, 2rem);
   box-shadow: var(--shadow-soft);
+  overflow: hidden;
   transition: box-shadow 0.25s, transform 0.25s, background 0.25s ease, border-color 0.25s ease;
 }
 
 .card:hover {
+  transform: translateY(-5px);
   box-shadow: 0 8px 32px -8px var(--card-hover-shadow);
 }
 
@@ -800,12 +916,13 @@ h4 {
   border: 1px solid var(--border);
   border-radius: var(--radius);
   padding: 1.5rem;
+  overflow: hidden;
   transition: transform 0.25s, box-shadow 0.25s, background 0.25s ease;
 }
 
 .value-card:hover {
-  transform: translateY(-3px);
-  box-shadow: var(--shadow-soft);
+  transform: translateY(-5px);
+  box-shadow: 0 14px 34px -16px var(--project-hover-shadow);
 }
 
 .value-icon {
@@ -842,12 +959,12 @@ h4 {
   box-shadow: var(--shadow-soft);
   display: flex;
   flex-direction: column;
-  transition: transform 0.25s, box-shadow 0.25s, background 0.25s ease, border-color 0.25s ease;
+  transition: transform 0.3s, box-shadow 0.3s, background 0.25s ease, border-color 0.25s ease;
 }
 
 .project-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 36px -12px var(--project-hover-shadow);
+  transform: translateY(-6px);
+  box-shadow: 0 18px 45px -16px var(--project-hover-shadow);
 }
 
 .project-img {
@@ -1025,12 +1142,13 @@ h4 {
   box-shadow: var(--shadow-soft);
   width: 100%;
   max-width: 16rem;
+  overflow: hidden;
   transition: box-shadow 0.25s, transform 0.25s, background 0.25s ease;
 }
 
 .person-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 12px 32px -12px var(--card-hover-shadow);
+  transform: translateY(-5px);
+  box-shadow: 0 16px 36px -16px var(--card-hover-shadow);
 }
 
 .person-card img {
@@ -1132,6 +1250,12 @@ h4 {
   background: var(--elevated);
   box-shadow: var(--shadow-soft);
   border: 1px solid var(--border);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.gallery-item:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 18px 40px -18px var(--project-hover-shadow);
 }
 
 .gallery-item img {
@@ -1391,12 +1515,14 @@ h4 {
   border-radius: var(--radius);
   padding: 1rem 1.15rem;
   min-width: 0;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  overflow: hidden;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
 }
 
 .contact-card:hover {
   border-color: var(--border-strong);
   box-shadow: var(--shadow-soft);
+  transform: translateY(-3px);
 }
 
 .contact-card-inner {
@@ -1463,8 +1589,14 @@ h4 {
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  transition: background 0.25s ease, border-color 0.25s ease;
+  overflow: hidden;
+  transition: background 0.25s ease, border-color 0.25s ease, box-shadow 0.3s ease, transform 0.3s ease;
   min-height: 0;
+}
+
+.contact-form:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 18px 44px -20px var(--project-hover-shadow);
 }
 
 .contact-form-title {
@@ -1618,12 +1750,15 @@ h4 {
   border: 1px solid rgba(255, 255, 255, 0.12);
   color: var(--white);
   text-decoration: none;
+  transition: transform 0.25s ease, background 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
 }
 
 .social-row a:hover {
   background: var(--accent);
   border-color: var(--accent);
   text-decoration: none;
+  transform: translateY(-3px);
+  box-shadow: 0 10px 26px -10px rgba(59, 130, 246, 0.55);
 }
 
 .social-row svg {
@@ -1678,7 +1813,20 @@ h4 {
   }
 
   .gallery-item img,
-  .project-img img {
+  .project-img img,
+  .btn,
+  .card,
+  .project-card,
+  .value-card,
+  .person-card,
+  .contact-card,
+  .contact-form,
+  .social-row a {
     transition: none;
+  }
+
+  .cursor-dot,
+  .cursor-ring {
+    display: none !important;
   }
 }
